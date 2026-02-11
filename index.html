@@ -2,139 +2,147 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YE TRACKER</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #8e44ad; --bg: #0a0a0a; --card-bg: #161616; --text: #ffffff; --text-dim: #a0a0a0; --glass: rgba(255, 255, 255, 0.05); }
-        * { box-sizing: border-box; }
+        :root { --accent: #8e44ad; --bg: #0a0a0a; --card-bg: #161616; --text: #ffffff; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 40px; }
-        
-        .header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--glass); padding-bottom: 30px; margin-bottom: 40px; }
-        h1 { font-family: 'Arial Black', sans-serif; font-size: 64px; letter-spacing: -4px; margin: 0; text-transform: uppercase; cursor: pointer; background: linear-gradient(to bottom, #fff 50%, #444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .dropdown { position: relative; display: inline-block; background: #fff; color: #000; padding: 12px 24px; font-weight: 900; text-transform: uppercase; cursor: pointer; z-index: 100; }
-        .dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: #111; width: 300px; max-height: 50vh; overflow-y: auto; border: 1px solid var(--glass); }
+        .header { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 40px; }
+        h1 { font-family: 'Arial Black', sans-serif; font-size: 50px; margin: 0; text-transform: uppercase; cursor: pointer; }
+        .dropdown { position: relative; display: inline-block; background: #fff; color: #000; padding: 12px 25px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: #111; width: 280px; max-height: 400px; overflow-y: auto; border: 1px solid #333; z-index: 100; }
         .dropdown:hover .dropdown-content { display: block; }
-        .dropdown-content button { width: 100%; padding: 15px; background: none; border: none; color: var(--text-dim); text-align: left; cursor: pointer; border-bottom: 1px solid var(--glass); font-family: inherit; }
-        .dropdown-content button:hover { background: var(--glass); color: var(--accent); }
-
+        .dropdown-content button { width: 100%; padding: 15px; background: none; border: none; color: #888; text-align: left; cursor: pointer; border-bottom: 1px solid #222; }
+        .dropdown-content button:hover { background: var(--accent); color: #fff; }
         .view { display: none; }
-        .active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: var(--card-bg); padding: 25px; border-radius: 4px; border: 1px solid transparent; transition: 0.3s; cursor: pointer; }
-        .card:hover { border-color: var(--accent); transform: translateY(-5px); background: #1f1f1f; }
-        .card strong { display: block; font-size: 16px; margin-bottom: 8px; }
-        .card span { font-size: 11px; color: var(--accent); font-weight: bold; text-transform: uppercase; }
-
-        .song-page { max-width: 800px; margin: 0 auto; background: var(--card-bg); padding: 50px; border-top: 8px solid var(--accent); }
-        .meta { display: flex; padding: 15px 0; border-bottom: 1px solid var(--glass); }
-        .label { width: 120px; color: var(--text-dim); font-size: 12px; font-weight: bold; text-transform: uppercase; }
-        .dl-btn { display: inline-block; margin-top: 30px; background: var(--accent); color: white; padding: 20px 40px; text-decoration: none; font-weight: 900; text-transform: uppercase; }
-        .back { background: none; border: 1px solid #333; color: var(--text-dim); padding: 10px 20px; cursor: pointer; margin-bottom: 20px; }
-        #status { color: var(--accent); margin-bottom: 20px; font-size: 14px; }
+        .active { display: block; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 5px; cursor: pointer; border: 1px solid transparent; }
+        .card:hover { border-color: var(--accent); }
+        .song-page { max-width: 700px; margin: 0 auto; background: var(--card-bg); padding: 40px; border-top: 5px solid var(--accent); }
+        .dl-btn { display: inline-block; margin-top: 25px; background: var(--accent); color: #fff; padding: 15px 30px; text-decoration: none; font-weight: bold; }
+        #error-log { color: #ff4444; background: rgba(255, 68, 68, 0.1); padding: 10px; display: none; margin-bottom: 20px; border: 1px solid #ff4444; }
     </style>
 </head>
 <body>
 
+    <div id="error-log"></div>
+
     <div class="header">
         <div>
-            <div class="dropdown">SELECT ERA ▾<div id="eraMenu" class="dropdown-content"></div></div>
+            <div class="dropdown">
+                Select Era ▾
+                <div id="eraMenu" class="dropdown-content"></div>
+            </div>
             <h1 onclick="location.reload()">YE TRACKER</h1>
         </div>
-        <div style="width: 200px; height: 100px; border: 1px solid var(--glass); display: flex; align-items: center; justify-content: center; color: #333; font-size: 10px;">ART PREVIEW</div>
     </div>
 
     <div id="listView" class="view active">
-        <div id="status">Loading Clean Database...</div>
-        <h2 id="currentEra" style="font-size: 40px; margin-bottom: 30px;"></h2>
+        <h2 id="eraTitle">Loading Tracker...</h2>
         <div id="songGrid" class="grid"></div>
     </div>
 
     <div id="songView" class="view">
-        <button class="back" onclick="showView('listView')">← BACK</button>
+        <button onclick="showView('listView')" style="background:none; color:#888; border:1px solid #444; padding:5px 10px; cursor:pointer; margin-bottom:20px;">← BACK</button>
         <div class="song-page">
-            <h1 id="detTitle" style="font-size: 48px; margin: 0 0 20px 0;"></h1>
-            <div class="meta"><div class="label">Quality</div><div id="detQual"></div></div>
-            <div class="meta"><div class="label">Notes</div><div id="detNote" style="line-height:1.6"></div></div>
-            <a id="detLink" href="#" target="_blank" class="dl-btn">DOWNLOAD / LISTEN</a>
+            <h1 id="sName"></h1>
+            <p id="sNotes"></p>
+            <a id="sLink" href="#" target="_blank" class="dl-btn">DOWNLOAD</a>
         </div>
     </div>
 
     <script>
         let trackerData = {};
 
-        async function load() {
+        async function init() {
+            const log = document.getElementById('error-log');
             try {
-                // FETCH THE CLEANED FILE
+                // Change this to 'Ye tracker - Unreleased.csv' if that's what your file is named
                 const response = await fetch('cleaned_tracker.csv');
-                const text = await response.text();
                 
-                // Simple splitting since we cleaned the data already
-                const rows = text.split(/\r?\n/).slice(1);
+                if (!response.ok) {
+                    log.style.display = "block";
+                    log.innerText = "Error: Could not find 'cleaned_tracker.csv'. Make sure the filename matches exactly!";
+                    return;
+                }
 
-                rows.forEach(row => {
-                    // Splits by comma but respects quotes
+                const text = await response.text();
+                const rows = text.split('\n');
+
+                if (rows.length < 2) {
+                    log.style.display = "block";
+                    log.innerText = "Error: The CSV file seems to be empty.";
+                    return;
+                }
+
+                rows.slice(1).forEach((row, index) => {
+                    // This regex handles commas inside quotes
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    if (cols.length < 5) return;
+                    if (cols.length < 4) return;
 
                     const era = cols[0].replace(/"/g, "").trim();
+                    if (!era) return;
+
                     const song = {
                         name: cols[1].replace(/"/g, "").trim(),
                         notes: cols[2].replace(/"/g, "").trim(),
-                        quality: cols[3].replace(/"/g, "").trim(),
-                        link: cols[4].replace(/"/g, "").trim()
+                        qual: cols[3] ? cols[3].replace(/"/g, "").trim() : "N/A",
+                        link: cols[4] ? cols[4].replace(/"/g, "").trim() : "#"
                     };
 
                     if (!trackerData[era]) trackerData[era] = [];
                     trackerData[era].push(song);
                 });
 
-                renderMenu();
-                document.getElementById('status').innerText = "● Database Online";
-            } catch (e) {
-                document.getElementById('status').innerText = "Error loading cleaned_tracker.csv";
+                const menu = document.getElementById('eraMenu');
+                const eras = Object.keys(trackerData);
+                
+                if (eras.length === 0) {
+                    document.getElementById('eraTitle').innerText = "No eras found in CSV.";
+                } else {
+                    document.getElementById('eraTitle').innerText = "Select an Era from the menu";
+                    eras.forEach(era => {
+                        const btn = document.createElement('button');
+                        btn.innerText = era;
+                        btn.onclick = () => loadEra(era);
+                        menu.appendChild(btn);
+                    });
+                }
+
+            } catch (err) {
+                log.style.display = "block";
+                log.innerText = "System Error: " + err.message;
             }
         }
 
-        function renderMenu() {
-            const menu = document.getElementById('eraMenu');
-            Object.keys(trackerData).sort().forEach(era => {
-                const btn = document.createElement('button');
-                btn.innerText = era;
-                btn.onclick = () => {
-                    showView('listView');
-                    document.getElementById('currentEra').innerText = era;
-                    const grid = document.getElementById('songGrid');
-                    grid.innerHTML = '';
-                    trackerData[era].forEach(s => {
-                        const card = document.createElement('div');
-                        card.className = 'card';
-                        card.innerHTML = `<strong>${s.name}</strong><span>${s.quality}</span>`;
-                        card.onclick = () => {
-                            showView('songView');
-                            document.getElementById('detTitle').innerText = s.name;
-                            document.getElementById('detQual').innerText = s.quality;
-                            document.getElementById('detNote').innerText = s.notes || "No extra info.";
-                            document.getElementById('detLink').href = s.link;
-                            document.getElementById('detLink').style.display = (s.link && s.link.startsWith('http')) ? 'inline-block' : 'none';
-                        };
-                        grid.appendChild(card);
-                    });
+        function loadEra(era) {
+            showView('listView');
+            document.getElementById('eraTitle').innerText = era;
+            const grid = document.getElementById('songGrid');
+            grid.innerHTML = '';
+
+            trackerData[era].forEach(song => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `<strong>${song.name}</strong><span style="color:#8e44ad; font-size:12px;">${song.qual}</span>`;
+                card.onclick = () => {
+                    showView('songView');
+                    document.getElementById('sName').innerText = song.name;
+                    document.getElementById('sNotes').innerText = song.notes;
+                    document.getElementById('sLink').href = song.link;
+                    document.getElementById('sLink').style.display = song.link === "#" ? "none" : "inline-block";
                 };
-                menu.appendChild(btn);
+                grid.appendChild(card);
             });
         }
 
         function showView(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            window.scrollTo(0,0);
         }
 
-        load();
+        init();
     </script>
 </body>
 </html>
