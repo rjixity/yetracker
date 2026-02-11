@@ -1,96 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YE TRACKER</title>
-    <style>
-        :root { --accent: #8e44ad; --bg: #ffffff; --text: #000000; }
-        body { font-family: 'Arial Black', sans-serif; background: var(--bg); color: var(--text); margin: 40px; }
-        
-        /* Header & Dropdown */
-        .header-container { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 50px; }
-        .title-section h1 { font-size: 48px; margin: 0; line-height: 1; }
-        .dropdown { position: relative; display: inline-block; cursor: pointer; background: black; color: white; padding: 5px 15px; margin-bottom: 10px; }
-        .dropdown-content { display: none; position: absolute; background: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px rgba(0,0,0,0.2); z-index: 1; }
-        .dropdown:hover .dropdown-content { display: block; }
-        .dropdown-content a { color: black; padding: 12px 16px; text-decoration: none; display: block; font-family: sans-serif; font-size: 14px; }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
 
-        /* Carousel */
-        .carousel { width: 400px; height: 200px; border: 3px solid var(--accent); overflow: hidden; position: relative; }
-        .slides { display: flex; width: 300%; height: 100%; animation: slide 10s infinite; }
-        .slide { width: 33.33%; background-size: cover; background-position: center; }
-        @keyframes slide { 
-            0% { transform: translateX(0); } 20% { transform: translateX(0); }
-            33% { transform: translateX(-33.33%); } 53% { transform: translateX(-33.33%); }
-            66% { transform: translateX(-66.66%); } 86% { transform: translateX(-66.66%); }
-        }
-
-        /* Stats Box */
-        .stats-box { border: 3px solid var(--accent); padding: 30px; margin-top: 30px; min-height: 200px; width: 70%; }
-        .stats-box h2 { color: var(--accent); font-family: sans-serif; font-weight: normal; margin-top: 0; }
-        .stat-number { font-size: 24px; color: var(--accent); }
-    </style>
-</head>
-<body>
-
-    <div class="header-container">
-        <div class="title-section">
-            <div class="dropdown">
-                MENU ▾
-                <div class="dropdown-content">
-                    <a href="#">The College Dropout</a>
-                    <a href="#">Late Registration</a>
-                    <a href="#">Graduation</a>
-                </div>
-            </div>
-            <h1>YE TRACKER</h1>
-            <p>full discography</p>
-        </div>
-
-        <div class="carousel">
-            <div class="slides">
-                <div class="slide" style="background-image: url('https://upload.wikimedia.org/wikipedia/en/a/a3/Kanye_West_The_College_Dropout.jpg')"></div>
-                <div class="slide" style="background-image: url('https://upload.wikimedia.org/wikipedia/en/f/f4/Late_registration_cd_cover.jpg')"></div>
-                <div class="slide" style="background-image: url('https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg')"></div>
-            </div>
-        </div>
+<div class="header-container">
+  <div class="title-section">
+    <div class="dropdown" tabindex="0">
+      SELECT ERA ▾
+      <div id="eraMenu" class="dropdown-content">
+        <button>Loading Database...</button>
+      </div>
     </div>
+    <h1 onclick="showHome()">YE TRACKER</h1>
+    <p id="subheading">UNRELEASED ARCHIVE</p>
+  </div>
 
-    <div class="stats-box">
-        <h2>Website Stats</h2>
-        <div id="loading">Calculating tracker data...</div>
-        <div id="statsContent" style="display:none;">
-            <p>Total Songs Found: <span id="songCount" class="stat-number">0</span></p>
-            <p>Eras Tracked: <span id="eraCount" class="stat-number">0</span></p>
-        </div>
-    </div>
+  <div class="carousel-box">
+    <div class="carousel-label">ALBUM ART</div>
+  </div>
+</div>
 
-    <script>
-        const csvUrl = 'YOUR_PUBLISHED_CSV_LINK_HERE'; // <--- PASTE LINK HERE
+<div id="listView" class="view active">
+  <div id="statsRow" class="stats-text">Initializing tracks...</div>
+  <h2 id="currentEraTitle"></h2>
+  <div id="songGrid" class="song-grid"></div>
+</div>
 
-        async function getStats() {
-            try {
-                const response = await fetch(csvUrl);
-                const data = await response.text();
-                const rows = data.split('\n').filter(row => row.trim() !== '');
-                
-                // Calculate Stats
-                const totalSongs = rows.length - 1; // Subtract header
-                
-                // Assuming Eras are in the first column (adjust index if needed)
-                const eras = new Set(rows.slice(1).map(r => r.split(',')[0]));
-
-                document.getElementById('songCount').textContent = totalSongs;
-                document.getElementById('eraCount').textContent = eras.size;
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('statsContent').style.display = 'block';
-            } catch (e) {
-                document.getElementById('loading').textContent = "Error loading stats. Check your CSV link!";
-            }
-        }
-
-        getStats();
-    </script>
-</body>
-</html>
+<div id="songView" class="view">
+  <button class="back-link" onclick="showView('listView')">← BACK TO LIST</button>
+  <div class="song-page">
+    <h1 id="detTitle">SONG NAME</h1>
+    <div class="meta-row"><div class="label">QUALITY</div><div id="detQual"></div></div>
+    <div class="meta-row"><div class="label">NOTES</div><div id="detNote"></div></div>
+    <a id="detLink" href="#" target="_blank" class="dl-btn">DOWNLOAD / LISTEN</a>
+  </div>
+</div>
