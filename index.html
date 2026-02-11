@@ -9,34 +9,24 @@
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 40px; }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 40px; }
         h1 { font-family: 'Arial Black', sans-serif; font-size: 50px; margin: 0; text-transform: uppercase; cursor: pointer; }
-        
-        /* Era Menu */
         .dropdown { position: relative; display: inline-block; background: #fff; color: #000; padding: 12px 25px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
         .dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: #111; width: 300px; max-height: 400px; overflow-y: auto; border: 1px solid #333; z-index: 100; }
         .dropdown:hover .dropdown-content { display: block; }
-        .dropdown-content button { width: 100%; padding: 15px; background: none; border: none; color: #888; text-align: left; cursor: pointer; border-bottom: 1px solid #222; font-family: inherit; }
+        .dropdown-content button { width: 100%; padding: 15px; background: none; border: none; color: #888; text-align: left; cursor: pointer; border-bottom: 1px solid #222; font-family: inherit; font-weight: bold; }
         .dropdown-content button:hover { background: var(--accent); color: #fff; }
-
-        /* Song List */
         .view { display: none; }
         .active { display: block; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
         .card { background: var(--card); padding: 20px; border-radius: 4px; border: 1px solid transparent; transition: 0.2s; cursor: pointer; }
         .card:hover { border-color: var(--accent); background: #1f1f1f; }
-        .card strong { display: block; font-size: 16px; margin-bottom: 5px; }
-        
         .dl-btn { display: inline-block; margin-top: 20px; background: var(--accent); color: #fff; padding: 15px 30px; text-decoration: none; font-weight: bold; border-radius: 4px; }
-        .back { background: none; border: 1px solid #444; color: #888; padding: 8px 15px; cursor: pointer; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <div>
-            <div class="dropdown">
-                SELECT ERA ▾
-                <div id="eraMenu" class="dropdown-content"></div>
-            </div>
+            <div class="dropdown">SELECT ERA ▾<div id="eraMenu" class="dropdown-content"></div></div>
             <h1 onclick="location.reload()">YE TRACKER</h1>
         </div>
     </div>
@@ -47,7 +37,7 @@
     </div>
 
     <div id="songView" class="view">
-        <button class="back" onclick="showView('listView')">← BACK</button>
+        <button onclick="showView('listView')" style="background:none; border:1px solid #444; color:#888; padding:8px 15px; cursor:pointer; margin-bottom:20px;">← BACK</button>
         <div style="background: var(--card); padding: 40px; border-top: 5px solid var(--accent); max-width: 600px; margin: 0 auto;">
             <h1 id="sName"></h1>
             <a id="sLink" href="#" target="_blank" class="dl-btn">DOWNLOAD / LISTEN</a>
@@ -64,19 +54,11 @@
                 const rows = text.split('\n').slice(1);
 
                 rows.forEach(row => {
-                    // Split by comma but handle potential quotes
-                    const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    const cols = row.split(',');
                     if (cols.length < 3) return;
 
-                    let era = cols[0].replace(/"/g, "").trim();
-                    
-                    // SAFETY FILTER: If the "Era" is actually a long paragraph or summary, skip it
-                    if (era.length > 40 || era.includes("OG File") || !era) return;
-
-                    const song = {
-                        name: cols[1].replace(/"/g, "").trim(),
-                        link: cols[2].replace(/"/g, "").trim()
-                    };
+                    let era = cols[0].trim();
+                    const song = { name: cols[1].trim(), link: cols[2].trim() };
 
                     if (!trackerData[era]) trackerData[era] = [];
                     trackerData[era].push(song);
@@ -94,7 +76,7 @@
                         trackerData[era].forEach(s => {
                             const div = document.createElement('div');
                             div.className = 'card';
-                            div.innerHTML = `<strong>${s.name}</strong><span style="color:var(--accent); font-size:12px;">Link Available</span>`;
+                            div.innerHTML = `<strong>${s.name}</strong>`;
                             div.onclick = () => {
                                 showView('songView');
                                 document.getElementById('sName').innerText = s.name;
@@ -105,9 +87,7 @@
                     };
                     menu.appendChild(btn);
                 });
-            } catch (err) {
-                console.error("Error loading CSV:", err);
-            }
+            } catch (err) { console.error(err); }
         }
 
         function showView(id) {
