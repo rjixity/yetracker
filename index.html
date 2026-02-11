@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YE VAULT</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root { --accent: #bb86fc; --bg: #050505; --card: #121212; --text: #ffffff; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+
+.carousel-container { position: relative; width: 100%; height: 400px; overflow: hidden; background: #000; }
+.carousel-track { display: flex; transition: transform 0.6s ease; height: 100%; }
+.carousel-slide { min-width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; }
+.carousel-slide img.bg-blur { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: blur(20px); position: absolute; }
+.carousel-content { position: relative; z-index: 10; text-align: center; }
+.carousel-content img.main-art { width: 220px; height: 220px; border-radius: 10px; margin-bottom: 15px; }
+
+.search-section { position: sticky; top: 0; background: var(--bg); padding: 20px 40px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+
+.tab-btn {
+background:#1a1a1a;border:1px solid #333;color:white;padding:10px 18px;border-radius:50px;
+cursor:pointer;font-weight:700;margin-right:10px;
+}
+.tab-btn.active { background:var(--accent); color:black; border-color:var(--accent); }
+
+.container { padding:20px 40px; max-width:1000px; margin:0 auto; }
+
+.era-folder { margin-bottom:10px;border-radius:8px;background:var(--card);border:1px solid #222; }
+.era-header { padding:18px 25px;cursor:pointer;display:flex;justify-content:space-between;font-weight:700;text-transform:uppercase; }
+.song-list { display:none;background:#0a0a0a;border-top:1px solid #222; }
+.song-item { padding:12px 25px;border-bottom:1px solid #111;display:flex;justify-content:space-between;cursor:pointer; }
+.song-item:hover { background:#161616;color:var(--accent); }
+
+.modal { display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);align-items:center;justify-content:center; }
+.modal-content { background:#161616;padding:40px;border-radius:20px;text-align:center;width:90%;max-width:450px; }
+.dl-link { display:inline-block;background:var(--accent);color:black;padding:15px 40px;text-decoration:none;font-weight:900;border-radius:50px;margin-top:20px; }
+</style>
+</head>
+<body>
+
+<div class="carousel-container">
+<div class="carousel-track" id="carouselTrack"></div>
+</div>
+
+<div class="search-section">
+<div>
+<button class="tab-btn active" onclick="switchTab('songs', this)">Songs</button>
+<button class="tab-btn" onclick="switchTab('albums', this)">Full Albums</button>
+</div>
+</div>
+
+<div class="container" id="songsContainer"></div>
+<div class="container" id="albumsContainer" style="display:none;"></div>
+
+<div id="songModal" class="modal" onclick="this.style.display='none'">
+<div class="modal-content" onclick="event.stopPropagation()">
+<h2 id="mName"></h2>
+<a id="mLink" href="#" target="_blank" class="dl-link">OPEN LINK</a>
+</div>
+</div>
+
+<script>
+const eraArt = {
+"The College Dropout":"https://upload.wikimedia.org/wikipedia/en/a/a3/Kanyewest_collegedropout.jpg",
+"Late Registration":"https://upload.wikimedia.org/wikipedia/en/f/f4/Late_registration_cd_cover.jpg",
+"Graduation":"https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg",
+"808s & Heartbreak":"https://upload.wikimedia.org/wikipedia/en/f/f1/808s_%26_Heartbreak.png"
+};
+
+let eraGroups = {};
+
+let albumGroups = {
+
+"Before The College Dropout":[
+{ title:"Full | Demo Beat Tape", type:"High Quality", link:"https://pillows.su/f/250b3778deb71ec177986796b49b47f0" },
+{ title:"Full | 2001 Beat CD 1", type:"High Quality", link:"https://pillows.su/f/14ce4d59e572866fb0c4af310ff5db04" },
+{ title:"Full | 2001 Beat CD 2", type:"High Quality", link:"https://pillows.su/f/2a3ea0802f4ff5a4595adc4c4fb19641" },
+{ title:"Full | 20001 Demo Tape", type:"High Quality", link:"https://pillows.su/f/fbb14a93b96f5f9d83423e63605630ab" }
+],
+
+"The College Dropout":[
+{ title:"Full | Very Early Version", type:"CD Quality", link:"https://pillows.su/f/7d83f3b0f2310144892a50e114700329" },
+{ title:"Full | Early Version", type:"CD Quality", link:"https://pillows.su/f/c7b210bd276cbf756c96c0e988e05f97" },
+{ title:"Tagged Expletives | Full Album", type:"Lossless", link:"https://pixeldrain.com/u/4VrVMRBg" }
+],
+
+"808s and Heartbreak":[
+{ title:"Full | Early Version", type:"CD Quality", link:"https://pillows.su/f/d85d5a81f6f076a56e828e9f81bf034b" }
+],
+
+"Good Ass Job":[
+{ title:"Full | Instrumental", type:"Lossless", link:"https://pillows.su/f/1b4a90cfed943ff4ab6214866f56fe11" }
+],
+
+"My Beautiful Dark Twisted Fantasy":[
+{ title:"Tagged Expletives | Full 2010 ", type:"High Quality", link:"https://pillows.su/f/f9c2b22432b2daee3517b9d35c6643bd" }
+],
+
+"Yeezus":[
+{ title:"Partial | 12/15 Tracks", type:"CD Quality", link:"https://pixeldrain.com/u/wdaqyU3k" },
+{ title:"OG File | Full", type:"CD Quality", link:"https://pillows.su/f/ec218fd4aefd25fdc46a923f08cf6fda" }
+],
+
+"Yeezus 2":[
+{ title:"OG File | Unordered Copy", type:"Lossless", link:"https://pillows.su/f/cadb91834c67008bd8214f7dfc39f80d" },
+{ title:"OG File | Incl. feat. Track", type:"Lossless", link:"https://pillows.su/f/86dadef922b4b6c8d4cafa8407ab1b66" },
+{ title:"OG File", type:"CD Quality", link:"https://pillows.su/f/4b2bd0e7170e1f79d1604eda21110505" }
+],
+
+"The Life Of Pablo":[
+{ title:"OG File | DJDS", type:"CD Quality", link:"https://pillows.su/f/0e7a84633f82775be22d1e5643917d81" },
+{ title:"OG File | DJDS Extd.", type:"CD Quality", link:"https://pillows.su/f/5c1a4e0b7a2e8821a362ecfefd8f75c6" },
+{ title:"Full | Original Release Version", type:"CD Quality", link:"https://pillows.su/f/2babb559fd55151dd9de1b31e16a83fa" }
+],
+
+"DONDA 2 (2025)":[
+{ title:"Partial", type:"Lossless", link:"https://pixeldrain.com/u/mAp6fiix" },
+{ title:"Full", type:"Lossless", link:"https://pixeldrain.com/u/aKP2A6o6" },
+{ title:"Full", type:"Lossless", link:"https://pixeldrain.com/u/PEuW77c3" },
+{ title:"OG File", type:"Lossless", link:"https://pixeldrain.com/u/uPa3G354" },
+{ title:"Full", type:"Lossless", link:"https://pixeldrain.com/u/g3iTS7Ws" },
+{ title:"Full", type:"Lossless", link:"https://pixeldrain.com/u/BbnVMwG4" }
+],
+
+"DAYTONA":[
+{ title:"OG File | Early Copy Blowbama", type:"CD Quality", link:"https://pillows.su/f/5ca8815e7763518779b7c144b2d76ca3" }
+],
+
+"K.T.S.E.":[
+{ title:"OG File | K.T.S.E", type:"Lossless", link:"https://pillows.su/f/395d927262b528ccb12e779c0c5bb4f1" }
+],
+
+"More Coming Soon... 👀":[
+{ title:"More Coming Soon...", type:"N/A", link:"N/A" }
+],
+
+};
+
+
+
+// INIT
+function init(){
+buildCarousel();
+renderAlbums();
+loadSongs();
+}
+
+// BUILD CAROUSEL
+function buildCarousel(){
+const track=document.getElementById("carouselTrack");
+Object.entries(eraArt).forEach(([name,img])=>{
+const slide=document.createElement("div");
+slide.className="carousel-slide";
+slide.innerHTML=`<img src="${img}" class="bg-blur">
+<div class="carousel-content">
+<img src="${img}" class="main-art">
+<h2>${name}</h2>
+</div>`;
+track.appendChild(slide);
+});
+let i=0;
+setInterval(()=>{
+const slides=document.querySelectorAll(".carousel-slide");
+i=(i+1)%slides.length;
+track.style.transform=`translateX(-${i*100}%)`;
+},4000);
+}
+
+// LOAD SONGS FROM CSV
+function loadSongs(){
+fetch("cleaned_tracker.csv")
+.then(res=>res.text())
+.then(text=>{
+
+const rows=text.trim().split(/\r?\n/).slice(1);
+eraGroups={};
+
+rows.forEach(row=>{
+if(!row.trim()) return;
+
+let cols=[];
+let current="";
+let inQuotes=false;
+
+for(let i=0;i<row.length;i++){
+let char=row[i];
+if(char==='"'){ inQuotes=!inQuotes; }
+else if(char===',' && !inQuotes){ cols.push(current); current=""; }
+else{ current+=char; }
+}
+cols.push(current);
+
+if(cols.length<3) return;
+
+let album=cols[0].replace(/^"|"$/g,'').trim();
+let song=cols[1].replace(/^"|"$/g,'').trim();
+let link=cols[cols.length-1].replace(/^"|"$/g,'').trim();
+
+if(!album||!song||!link) return;
+
+if(!eraGroups[album]) eraGroups[album]=[];
+eraGroups[album].push({name:song,link:link});
+});
+
+renderSongs();
+});
+}
+
+// RENDER SONGS
+function renderSongs(){
+const container=document.getElementById("songsContainer");
+container.innerHTML="";
+Object.keys(eraGroups).forEach(album=>{
+const folder=document.createElement("div");
+folder.className="era-folder";
+folder.innerHTML=`
+<div class="era-header" onclick="toggleFolder(this)">
+<span>${album}</span>
+<span>${eraGroups[album].length} SONGS</span>
+</div>
+<div class="song-list">
+${eraGroups[album].map(song=>`
+<div class="song-item" onclick="openModal('${song.name.replace(/'/g,"\\'")}','${song.link}')">
+<span>${song.name}</span>
+<span>OPEN →</span>
+</div>`).join("")}
+</div>`;
+container.appendChild(folder);
+});
+}
+
+// RENDER ALBUMS
+function renderAlbums(){
+const container=document.getElementById("albumsContainer");
+container.innerHTML="";
+
+Object.keys(albumGroups).forEach(album=>{
+const folder=document.createElement("div");
+folder.className="era-folder";
+
+folder.innerHTML=`
+<div class="era-header" onclick="toggleFolder(this)">
+<span>${album}</span>
+<span>${albumGroups[album].length} LINKS</span>
+</div>
+<div class="song-list">
+${albumGroups[album].map(entry=>`
+<div class="song-item" onclick="openModal('${album}','${entry.link}')">
+<div>
+<div style="font-weight:700;">${entry.title}</div>
+<div style="font-size:12px;opacity:.6;">${entry.type}</div>
+</div>
+<span>OPEN →</span>
+</div>
+`).join("")}
+</div>`;
+
+container.appendChild(folder);
+});
+}
+
+
+function switchTab(tab,btn){
+document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+document.getElementById("songsContainer").style.display=tab==="songs"?"block":"none";
+document.getElementById("albumsContainer").style.display=tab==="albums"?"block":"none";
+}
+
+function toggleFolder(header){
+const list=header.nextElementSibling;
+list.style.display=list.style.display==="block"?"none":"block";
+}
+
+function openModal(name,link){
+document.getElementById("mName").innerText=name;
+document.getElementById("mLink").href=link;
+document.getElementById("songModal").style.display="flex";
+}
+
+init();
+</script>
+</body>
+</html>
