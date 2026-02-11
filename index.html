@@ -1,34 +1,142 @@
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YE TRACKER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #8e44ad; --bg: #0a0a0a; --card-bg: #161616; --text-main: #ffffff; --text-dim: #a0a0a0; --glass: rgba(255, 255, 255, 0.05); }
+        body { background-color: var(--bg); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; padding: 40px; }
+        
+        /* Header */
+        .header-container { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--glass); padding-bottom: 30px; margin-bottom: 40px; }
+        h1 { font-family: 'Arial Black', sans-serif; font-size: clamp(32px, 8vw, 64px); letter-spacing: -4px; margin: 0; text-transform: uppercase; cursor: pointer; background: linear-gradient(to bottom, #fff 50%, #444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Dropdown */
+        .dropdown { position: relative; display: inline-block; background: #fff; color: #000; padding: 12px 24px; font-weight: 900; text-transform: uppercase; cursor: pointer; z-index: 100; }
+        .dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: #111; width: 300px; max-height: 50vh; overflow-y: auto; border: 1px solid var(--glass); }
+        .dropdown:hover .dropdown-content { display: block; }
+        .dropdown-content button { width: 100%; padding: 15px; background: none; border: none; color: var(--text-dim); text-align: left; cursor: pointer; border-bottom: 1px solid var(--glass); }
+        .dropdown-content button:hover { background: var(--glass); color: var(--accent); }
 
-<div class="header-container">
-  <div class="title-section">
-    <div class="dropdown" tabindex="0">
-      SELECT ERA ▾
-      <div id="eraMenu" class="dropdown-content">
-        <button>Loading Database...</button>
-      </div>
+        /* Carousel Placeholder from Paint Sketch */
+        .carousel-box { width: 300px; height: 150px; border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; color: var(--accent); font-weight: bold; }
+
+        /* Grid */
+        .view { display: none; }
+        .active { display: block; }
+        .song-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .song-card { background: var(--card-bg); padding: 24px; border-radius: 4px; border: 1px solid transparent; transition: 0.3s; cursor: pointer; }
+        .song-card:hover { border-color: var(--accent); transform: translateY(-5px); background: #1f1f1f; }
+        .song-card strong { display: block; font-size: 16px; margin-bottom: 8px; }
+        .song-card span { font-size: 11px; color: var(--accent); font-weight: bold; text-transform: uppercase; }
+
+        /* Song Page */
+        .song-page { max-width: 800px; margin: 0 auto; background: var(--card-bg); padding: 50px; border-top: 8px solid var(--accent); }
+        .meta-row { display: flex; padding: 15px 0; border-bottom: 1px solid var(--glass); }
+        .label { width: 120px; color: var(--text-dim); font-size: 12px; font-weight: bold; }
+        .dl-btn { display: inline-block; margin-top: 30px; background: var(--accent); color: white; padding: 18px 36px; text-decoration: none; font-weight: 900; text-transform: uppercase; }
+        .back-btn { background: none; border: 1px solid #333; color: var(--text-dim); padding: 8px 16px; cursor: pointer; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="title-section">
+            <div class="dropdown">SELECT ERA ▾<div id="eraMenu" class="dropdown-content"></div></div>
+            <h1 onclick="location.reload()">YE TRACKER</h1>
+        </div>
+        <div class="carousel-box">ART CAROUSEL</div>
     </div>
-    <h1 onclick="showHome()">YE TRACKER</h1>
-    <p id="subheading">UNRELEASED ARCHIVE</p>
-  </div>
 
-  <div class="carousel-box">
-    <div class="carousel-label">ALBUM ART</div>
-  </div>
-</div>
+    <div id="listView" class="view active">
+        <p id="status" style="color:var(--text-dim)">Loading all links from CSV...</p>
+        <h2 id="currentEra"></h2>
+        <div id="songGrid" class="song-grid"></div>
+    </div>
 
-<div id="listView" class="view active">
-  <div id="statsRow" class="stats-text">Initializing tracks...</div>
-  <h2 id="currentEraTitle"></h2>
-  <div id="songGrid" class="song-grid"></div>
-</div>
+    <div id="songView" class="view">
+        <button class="back-btn" onclick="showView('listView')">← BACK</button>
+        <div class="song-page">
+            <h1 id="detTitle" style="font-size:48px; margin:0 0 20px 0;"></h1>
+            <div class="meta-row"><div class="label">QUALITY</div><div id="detQual"></div></div>
+            <div class="meta-row"><div class="label">NOTES</div><div id="detNote"></div></div>
+            <a id="detLink" href="#" target="_blank" class="dl-btn">DOWNLOAD / LISTEN</a>
+        </div>
+    </div>
 
-<div id="songView" class="view">
-  <button class="back-link" onclick="showView('listView')">← BACK TO LIST</button>
-  <div class="song-page">
-    <h1 id="detTitle">SONG NAME</h1>
-    <div class="meta-row"><div class="label">QUALITY</div><div id="detQual"></div></div>
-    <div class="meta-row"><div class="label">NOTES</div><div id="detNote"></div></div>
-    <a id="detLink" href="#" target="_blank" class="dl-btn">DOWNLOAD / LISTEN</a>
-  </div>
-</div>
+    <script>
+        let trackerData = {};
+
+        async function loadCSV() {
+            try {
+                // This points to the file you upload to GitHub
+                const response = await fetch('./Ye tracker - Unreleased.csv');
+                const text = await response.text();
+                const rows = text.split(/\r?\n/).slice(1);
+
+                rows.forEach(row => {
+                    const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    if (cols.length < 9) return;
+
+                    const era = cols[0].replace(/"/g, "").trim();
+                    if (!era || era.includes("OG File") || era.includes("Discord")) return;
+
+                    const song = {
+                        name: cols[1].replace(/"/g, "").split('\n')[0].trim(),
+                        notes: cols[2].replace(/"/g, "").trim(),
+                        quality: cols[7]?.replace(/"/g, "").trim() || "N/A",
+                        link: cols[8]?.replace(/"/g, "").trim() || "#"
+                    };
+
+                    if (!trackerData[era]) trackerData[era] = [];
+                    trackerData[era].push(song);
+                });
+
+                renderMenu();
+                document.getElementById('status').innerText = "Database Online";
+            } catch (e) {
+                document.getElementById('status').innerText = "Error: Ensure CSV is in the same folder.";
+            }
+        }
+
+        function renderMenu() {
+            const menu = document.getElementById('eraMenu');
+            Object.keys(trackerData).forEach(era => {
+                const btn = document.createElement('button');
+                btn.innerText = era;
+                btn.onclick = () => {
+                    showView('listView');
+                    document.getElementById('currentEra').innerText = era;
+                    const grid = document.getElementById('songGrid');
+                    grid.innerHTML = '';
+                    trackerData[era].forEach(song => {
+                        const card = document.createElement('div');
+                        card.className = 'song-card';
+                        card.innerHTML = `<strong>${song.name}</strong><span>${song.quality}</span>`;
+                        card.onclick = () => {
+                            showView('songView');
+                            document.getElementById('detTitle').innerText = song.name;
+                            document.getElementById('detQual').innerText = song.quality;
+                            document.getElementById('detNote').innerText = song.notes;
+                            document.getElementById('detLink').href = song.link;
+                            document.getElementById('detLink').style.display = song.link === "#" ? "none" : "block";
+                        };
+                        grid.appendChild(card);
+                    });
+                };
+                menu.appendChild(btn);
+            });
+        }
+
+        function showView(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        loadCSV();
+    </script>
+</body>
+</html>
