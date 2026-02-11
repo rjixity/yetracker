@@ -7,51 +7,41 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
         :root { --accent: #8e44ad; --bg: #0a0a0a; --card-bg: #161616; --text-main: #ffffff; --text-dim: #a0a0a0; --glass: rgba(255, 255, 255, 0.05); }
-        
         * { box-sizing: border-box; }
         body { background-color: var(--bg); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; padding: 20px 40px; }
 
-        /* Header Layout */
-        .header-container { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--glass); padding-bottom: 30px; margin-bottom: 40px; gap: 20px; }
-        .title-section h1 { font-family: 'Arial Black', sans-serif; font-size: clamp(32px, 8vw, 64px); letter-spacing: -4px; margin: 0; text-transform: uppercase; cursor: pointer; background: linear-gradient(to bottom, #fff 50%, #444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* Header */
+        .header-container { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--glass); padding-bottom: 30px; margin-bottom: 40px; }
+        h1 { font-family: 'Arial Black', sans-serif; font-size: clamp(32px, 8vw, 64px); letter-spacing: -4px; margin: 0; text-transform: uppercase; cursor: pointer; background: linear-gradient(to bottom, #fff 50%, #444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Modern Dropdown */
-        .dropdown { position: relative; display: inline-block; background: #fff; color: #000; padding: 12px 24px; font-weight: 900; text-transform: uppercase; cursor: pointer; z-index: 100; margin-bottom: 15px; }
+        /* Navigation */
+        .dropdown { position: relative; display: inline-block; background: #fff; color: #000; padding: 12px 24px; font-weight: 900; text-transform: uppercase; cursor: pointer; z-index: 100; }
         .dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: #111; width: 320px; max-height: 60vh; overflow-y: auto; border: 1px solid var(--glass); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .dropdown:hover .dropdown-content { display: block; }
-        .dropdown-content button { width: 100%; padding: 15px; background: none; border: none; color: var(--text-dim); text-align: left; cursor: pointer; border-bottom: 1px solid var(--glass); font-family: inherit; font-size: 13px; }
-        .dropdown-content button:hover { background: var(--glass); color: var(--accent); padding-left: 20px; }
+        .dropdown-content button { width: 100%; padding: 14px; background: none; border: none; color: var(--text-dim); text-align: left; cursor: pointer; border-bottom: 1px solid var(--glass); font-family: inherit; font-size: 13px; }
+        .dropdown-content button:hover { background: var(--glass); color: var(--accent); }
 
-        /* Main Grid */
-        .view { display: none; transition: opacity 0.3s; }
+        /* Views */
+        .view { display: none; }
         .active { display: block; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .song-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .song-card { background: var(--card-bg); padding: 25px; border-radius: 4px; border: 1px solid transparent; transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; }
-        .song-card:hover { border-color: var(--accent); transform: translateY(-5px); background: #1f1f1f; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
-        .song-card strong { font-size: 17px; margin-bottom: 10px; line-height: 1.2; display: block; }
-        .song-card span { font-size: 11px; color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        /* Song Grid */
+        .song-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .song-card { background: var(--card-bg); padding: 25px; border-radius: 4px; border: 1px solid transparent; transition: 0.3s; cursor: pointer; }
+        .song-card:hover { border-color: var(--accent); transform: translateY(-5px); background: #1f1f1f; }
+        .song-card strong { display: block; font-size: 16px; margin-bottom: 8px; line-height: 1.2; height: 40px; overflow: hidden; }
+        .song-card span { font-size: 11px; color: var(--accent); font-weight: bold; text-transform: uppercase; }
 
-        /* Song Page Details */
-        .song-page { max-width: 900px; margin: 0 auto; background: var(--card-bg); padding: 60px; border-top: 8px solid var(--accent); }
-        .meta-row { display: flex; padding: 20px 0; border-bottom: 1px solid var(--glass); align-items: flex-start; }
-        .label { width: 140px; color: var(--text-dim); font-size: 12px; font-weight: 900; text-transform: uppercase; flex-shrink: 0; }
-        .value { font-size: 16px; line-height: 1.6; }
-        .dl-btn { display: inline-block; margin-top: 40px; background: var(--accent); color: white; padding: 20px 45px; text-decoration: none; font-weight: 900; text-transform: uppercase; transition: 0.2s; }
-        .dl-btn:hover { filter: brightness(1.2); transform: scale(1.02); }
-        .back-btn { background: none; border: 1px solid #333; color: var(--text-dim); padding: 10px 20px; cursor: pointer; margin-bottom: 30px; font-weight: bold; }
-        .back-btn:hover { background: #fff; color: #000; }
-
-        /* Status Messages */
-        #status { padding: 15px; border-radius: 4px; font-size: 14px; margin-bottom: 30px; border: 1px solid transparent; }
-        .loading { background: #8e44ad11; color: var(--accent); border-color: var(--accent); }
-        .error { background: #ff444422; color: #ff4444; border-color: #ff4444; }
+        /* Detailed Page */
+        .song-page { max-width: 800px; margin: 0 auto; background: var(--card-bg); padding: 50px; border-top: 8px solid var(--accent); }
+        .meta-row { display: flex; padding: 18px 0; border-bottom: 1px solid var(--glass); }
+        .label { width: 120px; color: var(--text-dim); font-size: 12px; font-weight: 900; text-transform: uppercase; }
+        .value { flex: 1; font-size: 15px; line-height: 1.5; white-space: pre-wrap; }
+        .dl-btn { display: inline-block; margin-top: 30px; background: var(--accent); color: white; padding: 20px 40px; text-decoration: none; font-weight: 900; text-transform: uppercase; }
+        .back-btn { background: none; border: 1px solid #333; color: var(--text-dim); padding: 10px 20px; cursor: pointer; margin-bottom: 20px; }
         
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: #333; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        #status { color: var(--accent); font-size: 14px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -64,22 +54,19 @@
             </div>
             <h1 onclick="window.location.reload()">YE TRACKER</h1>
         </div>
-        <div style="width: 300px; height: 120px; border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--accent);">
-            ALBUM ART CAROUSEL
-        </div>
+        <div style="width: 200px; height: 80px; border: 1px solid var(--glass); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #444;">YE ART</div>
     </div>
 
     <div id="listView" class="view active">
-        <div id="status" class="loading">Reading "Ye tracker - Unreleased.csv"...</div>
-        <h2 id="currentEra" style="font-size: 42px; margin-bottom: 30px; text-transform: uppercase;"></h2>
+        <div id="status">Syncing with CSV...</div>
+        <h2 id="currentEra" style="font-size: 40px; margin-bottom: 30px;"></h2>
         <div id="songGrid" class="song-grid"></div>
     </div>
 
     <div id="songView" class="view">
-        <button class="back-btn" onclick="showView('listView')">← BACK TO LIST</button>
+        <button class="back-btn" onclick="showView('listView')">← BACK</button>
         <div class="song-page">
-            <h1 id="detTitle" style="font-size: 56px; margin: 0 0 30px 0; line-height: 1;"></h1>
-            <div class="meta-row"><div class="label">Era</div><div id="detEra" class="value"></div></div>
+            <h1 id="detTitle" style="font-size: 42px; margin: 0 0 20px 0;"></h1>
             <div class="meta-row"><div class="label">Quality</div><div id="detQual" class="value"></div></div>
             <div class="meta-row"><div class="label">Notes</div><div id="detNote" class="value"></div></div>
             <a id="detLink" href="#" target="_blank" class="dl-btn">DOWNLOAD / LISTEN</a>
@@ -88,45 +75,40 @@
 
     <script>
         let trackerData = {};
-        const CSV_FILENAME = 'Ye tracker - Unreleased.csv';
+        const CSV_FILE = 'Ye tracker - Unreleased.csv';
 
-        async function loadTracker() {
-            const status = document.getElementById('status');
+        async function init() {
             try {
-                const response = await fetch(CSV_FILENAME);
-                if (!response.ok) throw new Error(`Could not find "${CSV_FILENAME}" in this folder.`);
-
+                const response = await fetch(CSV_FILE);
                 const text = await response.text();
-                // Regex to split rows while respecting quotes and newlines within cells
+                // Improved split to handle quotes and newlines in cells
                 const rows = text.split(/\r?\n(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 
                 rows.slice(1).forEach(row => {
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if (cols.length < 9) return;
 
-                    let era = cols[0].replace(/^"|"$/g, '').trim();
-                    // Skip technical/header/summary rows
-                    if (!era || era.includes("OG File") || era.includes("Discord")) return;
+                    let eraRaw = cols[0].replace(/^"|"$/g, '').trim();
+                    
+                    // --- CLEANER FILTER ---
+                    // This skips the "1 OG File", "Discord ads", and empty rows
+                    if (!eraRaw || eraRaw.includes("OG File") || eraRaw.includes("Discord") || eraRaw.includes("Era names")) return;
 
                     const song = {
                         name: cols[1].replace(/^"|"$/g, '').split('\n')[0].trim(),
                         notes: cols[2].replace(/^"|"$/g, '').trim(),
                         quality: cols[7]?.replace(/^"|"$/g, '').trim() || "N/A",
-                        link: cols[8]?.replace(/^"|"$/g, '').trim() || "#"
+                        link: cols[8]?.replace(/^"|"$/g, '').replace(/[\"\s]/g, '').split(',')[0] // Cleans link field
                     };
 
-                    if (!trackerData[era]) trackerData[era] = [];
-                    trackerData[era].push(song);
+                    if (!trackerData[eraRaw]) trackerData[eraRaw] = [];
+                    trackerData[eraRaw].push(song);
                 });
 
-                if (Object.keys(trackerData).length === 0) throw new Error("CSV was found but no songs were extracted. Check formatting.");
-
                 renderMenu();
-                status.style.display = 'none'; // Hide status on success
+                document.getElementById('status').innerText = "● Database Connected";
             } catch (err) {
-                status.className = "error";
-                status.innerText = "CRITICAL ERROR: " + err.message;
-                console.error(err);
+                document.getElementById('status').innerText = "Error: CSV not found or invalid.";
             }
         }
 
@@ -135,44 +117,37 @@
             Object.keys(trackerData).sort().forEach(era => {
                 const btn = document.createElement('button');
                 btn.innerText = era;
-                btn.onclick = () => showEra(era);
+                btn.onclick = () => {
+                    showView('listView');
+                    document.getElementById('currentEra').innerText = era;
+                    const grid = document.getElementById('songGrid');
+                    grid.innerHTML = '';
+                    trackerData[era].forEach(song => {
+                        const card = document.createElement('div');
+                        card.className = 'song-card';
+                        card.innerHTML = `<strong>${song.name}</strong><span>${song.quality}</span>`;
+                        card.onclick = () => {
+                            showView('songView');
+                            document.getElementById('detTitle').innerText = song.name;
+                            document.getElementById('detQual').innerText = song.quality;
+                            document.getElementById('detNote').innerText = song.notes || "No extra info.";
+                            document.getElementById('detLink').href = song.link;
+                            document.getElementById('detLink').style.display = (song.link && song.link.startsWith('http')) ? 'inline-block' : 'none';
+                        };
+                        grid.appendChild(card);
+                    });
+                };
                 menu.appendChild(btn);
             });
-        }
-
-        function showEra(era) {
-            showView('listView');
-            document.getElementById('currentEra').innerText = era;
-            const grid = document.getElementById('songGrid');
-            grid.innerHTML = '';
-            
-            trackerData[era].forEach(song => {
-                const card = document.createElement('div');
-                card.className = 'song-card';
-                card.innerHTML = `<strong>${song.name}</strong><span>${song.quality}</span>`;
-                card.onclick = () => showSong(song, era);
-                grid.appendChild(card);
-            });
-            window.scrollTo(0,0);
-        }
-
-        function showSong(song, era) {
-            showView('songView');
-            document.getElementById('detTitle').innerText = song.name;
-            document.getElementById('detEra').innerText = era;
-            document.getElementById('detQual').innerText = song.quality;
-            document.getElementById('detNote').innerText = song.notes || "No additional information available.";
-            document.getElementById('detLink').href = song.link;
-            document.getElementById('detLink').style.display = (song.link === "#" || !song.link) ? "none" : "inline-block";
-            window.scrollTo(0,0);
         }
 
         function showView(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        loadTracker();
+        init();
     </script>
 </body>
 </html>
