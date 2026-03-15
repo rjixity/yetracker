@@ -1,6 +1,6 @@
-# YE Archive
+# YeVault
 
-A comprehensive archive of every Kanye West era — unreleased, released, and album copies. Browse songs by era, view quality ratings, and access direct download/stream links.
+A comprehensive archive of every Ye era: unreleased, released, and album copies. Browse songs by era, view quality ratings, and access direct download/stream links.
 
 ---
 
@@ -16,7 +16,6 @@ A comprehensive archive of every Kanye West era — unreleased, released, and al
 
 ### v2.1.0
 - Split into multi-file structure for GitHub Pages (`index.html` + `assets/`)
-- Added Base64 encoding for data obfuscation
 
 ### v2.0.0
 - Full rebuild with tabbed navigation (Unreleased, Released, Album Copies)
