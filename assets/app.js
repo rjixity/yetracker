@@ -12,7 +12,7 @@ let allData=null,currentTab='u',currentLabel='Songs';
 function loadData(){allData=JSON.parse(atob(RAW));}
 function resetHero(){
   document.getElementById('hero-bg').style.background='radial-gradient(ellipse 60% 80% at 50% 50%,#1a0a2e 0%,#0a0a0a 75%)';
-  document.getElementById('hero-sub').textContent='THE COMPLETE ARCHIVE';
+  document.getElementById('hero-sub').textContent="A collection of Ye's full discography";
 }
 function switchTab(key,label){
   currentTab=key;currentLabel=label;
