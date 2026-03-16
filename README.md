@@ -6,7 +6,7 @@ A comprehensive archive of every Ye era: unreleased, released, and album copies.
 
 ## Version History
 
-### v2.3.0
+### v3.0.0
 - UI overhaul
 - Mobile viewing optimizations
 
