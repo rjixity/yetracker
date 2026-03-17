@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#080808;min-height:100vh;font-family:'DM Sans',sans-serif;color:#d0d0d0;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;background:rgba(8,8,8,0.85);backdrop-filter:blur(12px);border-bottom:1px solid #111}
+.nav-logo{font-family:'Unbounded',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.15em;color:#fff}
+.nav-tabs{display:flex;gap:4px}
+.nav-tab{padding:6px 14px;border-radius:20px;border:none;background:transparent;color:#555;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.05em;transition:all 0.2s}
+.nav-tab.active{background:#ffffff12;color:#fff}
+.nav-tab:hover:not(.active){color:#aaa}
+.nav-stats{display:flex;gap:16px;align-items:center}
+.nav-stat{font-size:11px;color:#333;letter-spacing:0.1em}
+.nav-stat span{color:#7c5cbf;font-weight:500}
+
+/* HERO */
+.hero{height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#080808}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,#080808 100%)}
+#hero-bg{position:absolute;inset:0;opacity:0.4;transition:background 0.8s,opacity 0.8s}
+.hero-title{position:relative;z-index:1;font-family:'Unbounded',sans-serif;font-size:clamp(36px,8vw,72px);font-weight:600;letter-spacing:0.08em;color:#fff;line-height:1}
+.hero-sub{position:relative;z-index:1;font-size:10px;color:#444;letter-spacing:0.3em;margin-top:8px;text-transform:uppercase;font-weight:300}
+
+/* SEARCH */
+.search-wrap{padding:16px 20px 8px;max-width:760px;margin:0 auto;width:100%}
+.search-box{width:100%;background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:10px 16px 10px 40px;color:#e0e0e0;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23444' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:14px center}
+.search-box:focus{border-color:#2e2e2e}
+.search-box::placeholder{color:#333}
+
+/* ERA LIST */
+.era-list{padding:8px 20px 40px;max-width:760px;margin:0 auto;width:100%}
+.era-wrap{margin-bottom:6px}
+.era-row{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#0f0f0f;border-radius:10px;cursor:pointer;transition:background 0.15s,border-color 0.15s;border:1px solid #161616;user-select:none}
+.era-row:hover{background:#131313;border-color:#222}
+.era-row.active{background:#110f1a;border-color:#3a2a5a}
+.era-row-name{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:400;letter-spacing:0.08em;color:#ccc;text-transform:uppercase}
+.era-row.active .era-row-name{color:#fff}
+.era-row-right{display:flex;align-items:center;gap:10px}
+.era-pill{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#1a1a1a;color:#555;letter-spacing:0.05em;transition:all 0.2s;border:1px solid #222}
+.era-row.active .era-pill{background:#2a1a4a;color:#9c78ff;border-color:#3a2a5a}
+.era-chevron{width:14px;height:14px;color:#333;transition:transform 0.3s,color 0.2s;flex-shrink:0}
+.era-row.active .era-chevron{transform:rotate(180deg);color:#7c5cbf}
+
+/* SONGS PANEL */
+.songs-panel{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);border-radius:0 0 10px 10px}
+.songs-panel.open{max-height:4000px}
+.songs-inner{padding:4px 0 8px;border:1px solid #161616;border-top:none;border-radius:0 0 10px 10px;background:#0a0a0a}
+.song-item{display:flex;align-items:center;gap:12px;padding:9px 18px;transition:background 0.1s;text-decoration:none;color:inherit}
+.song-item:hover{background:#0f0f0f}
+.song-num{font-size:11px;color:#2a2a2a;min-width:24px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
+.song-name{flex:1;font-size:13px;color:#aaa;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:400}
+.song-item:hover .song-name{color:#ddd}
+.song-quality{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;letter-spacing:0.04em;flex-shrink:0;white-space:nowrap}
+.q-high{background:#0d2a0d;color:#4caf50;border:1px solid #1a4a1a}
+.q-cd{background:#0d1e2a;color:#4a9eff;border:1px solid #1a3a4a}
+.q-low{background:#2a0d0d;color:#f44336;border:1px solid #4a1a1a}
+.q-rec{background:#2a220d;color:#ffc107;border:1px solid #4a3a1a}
+.q-na{background:#111;color:#333;border:1px solid #1a1a1a}
+.q-other{background:#150d2a;color:#9c88ff;border:1px solid #2a1a4a}
+.q-conf{background:#0d2a2a;color:#26c6da;border:1px solid #1a4a4a}
+.song-len{font-size:11px;color:#2a2a2a;min-width:36px;text-align:right;flex-shrink:0}
+.play-btn{width:24px;height:24px;border-radius:50%;border:1px solid #1e1e1e;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s}
+
+.play-btn svg{width:8px;height:8px;fill:#333;margin-left:2px;transition:fill 0.15s}
+
+.no-link .play-btn{opacity:0.2;pointer-events:none}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:40px 20px;color:#2a2a2a;font-size:13px;letter-spacing:0.1em}
+
+/* MOBILE */
+@media(max-width:600px){
+  .nav{padding:0 16px}
+  .nav-stats{display:none}
+  .nav-tabs{gap:2px}
+  .nav-tab{padding:5px 10px;font-size:11px}
+  .search-wrap{padding:12px 16px 6px}
+  .era-list{padding:6px 16px 40px}
+  .era-row{padding:12px 14px}
+  .era-row-name{font-size:10px}
+  .song-item{padding:8px 14px;gap:8px}
+  .song-name{font-size:12px}
+  .song-quality{display:none}
+  .hero-title{font-size:clamp(32px,10vw,60px)}
+}
+
+.ext-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:0;transition:opacity 0.15s}
+.song-item:hover .ext-icon{opacity:1}
+.ext-icon svg{width:12px;height:12px;stroke:#666;transition:stroke 0.15s}
+.song-item:hover .ext-icon svg{stroke:#9c78ff}
+.no-link .ext-icon{display:none}
+.era-list{padding-bottom:20px}
+/* FADE IN */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.nav{animation:fadeUp 0.4s ease both}
+.hero{animation:fadeUp 0.5s 0.05s ease both}
+.search-wrap{animation:fadeUp 0.5s 0.1s ease both}
+.era-list{animation:fadeUp 0.5s 0.15s ease both}
+
+/* SCROLL TO TOP */
+.scroll-top{position:fixed;bottom:28px;right:24px;width:38px;height:38px;border-radius:50%;background:#111;border:1px solid #222;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 0.2s,border-color 0.2s,background 0.2s;z-index:100}
+.scroll-top.visible{opacity:1;pointer-events:all}
+.scroll-top:hover{background:#1a1a2a;border-color:#3a2a5a}
+.scroll-top svg{width:14px;height:14px;stroke:#666;fill:none;transition:stroke 0.2s}
+.scroll-top:hover svg{stroke:#9c78ff}
+
+/* FOOTER */
+.footer{text-align:center;padding:32px 20px 48px;border-top:1px solid #111;margin-top:20px}
+.footer-version{font-family:'Unbounded',sans-serif;font-size:10px;color:#222;letter-spacing:0.15em;margin-bottom:8px}
+.footer-credits{font-size:11px;color:#1e1e1e;letter-spacing:0.08em}
+.footer-credits a{color:#2e2e2e;text-decoration:none;transition:color 0.2s}
+.footer-credits a:hover{color:#7c5cbf}
+
+/* SONG NOTES */
+.song-note{font-size:11px;color:#333;line-height:1.5;padding:4px 18px 10px 62px;display:none}
+.song-item.expanded + .song-note{display:block}
+.song-item.has-note{cursor:pointer}
+.song-item.has-note .song-name{transition:color 0.15s}
+.note-toggle{width:16px;height:16px;border-radius:50%;border:1px solid #1e1e1e;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;font-size:9px;color:#2a2a2a;line-height:1}
+.song-item.has-note:hover .note-toggle{border-color:#3a2a5a;color:#7c5cbf}
+.song-item.expanded .note-toggle{background:#1a1230;border-color:#3a2a5a;color:#9c78ff}
+
+/* TAB SWITCH ANIMATION */
+@keyframes tabFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.era-list.switching{animation:tabFadeIn 0.25s ease both}
+
+/* KOFI */
+.kofi-section{text-align:center;padding:32px 20px;border-top:1px solid #111}
+.kofi-text{font-size:12px;color:#333;letter-spacing:0.1em;margin-bottom:14px}
+.kofi-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:24px;background:#111;border:1px solid #222;color:#888;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;text-decoration:none;transition:all 0.2s;letter-spacing:0.03em}
+.kofi-btn:hover{background:#1a1230;border-color:#7c5cbf;color:#c0a8ff}
+.kofi-heart{font-size:14px}
+
+.nav-kofi{padding:5px 14px;border-radius:20px;border:1px solid #2a2a2a;background:transparent;color:#666;font-size:12px;font-weight:500;text-decoration:none;transition:all 0.2s;letter-spacing:0.03em;white-space:nowrap}
+.nav-kofi:hover{border-color:#7c5cbf;color:#c0a8ff;background:#1a1230}
+
