@@ -1,5 +1,7 @@
 # YeVault
 
+## IF YOU ARE SEEING THIS, THE PAGE IS CURRENTLY BEING UPDATED... PLEASE WAIT
+
 A comprehensive archive of every Ye era: unreleased, released, and album copies. Browse songs by era, view quality ratings, and access direct download/stream links.
 
 TIP/DONATION PAGE: https://ko-fi.com/yevault
