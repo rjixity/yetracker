@@ -1,6 +1,6 @@
 # YeVault
 
-## IF YOU ARE SEEING THIS, THE PAGE IS CURRENTLY BEING UPDATED... PLEASE WAIT
+## IF YOU ARE SEEING THIS, THE PAGE IS CURRENTLY UNDER MAINTENANCE... PLEASE WAIT
 
 A comprehensive archive of every Ye era: unreleased, released, and album copies. Browse songs by era, view quality ratings, and access direct download/stream links.
 
